@@ -59,12 +59,10 @@ const Dashboard = () => {
   const handleFilterChange = (filters) => {
     let filtered = [...jobs];
     
-    // Filter by status
     if (filters.status) {
       filtered = filtered.filter(job => job.status === filters.status);
     }
     
-    // Filter by date range
     if (filters.startDate) {
       const startDate = new Date(filters.startDate);
       filtered = filtered.filter(job => new Date(job.applicationDate) >= startDate);
@@ -72,11 +70,10 @@ const Dashboard = () => {
     
     if (filters.endDate) {
       const endDate = new Date(filters.endDate);
-      endDate.setHours(23, 59, 59, 999); // End of the day
+      endDate.setHours(23, 59, 59, 999);
       filtered = filtered.filter(job => new Date(job.applicationDate) <= endDate);
     }
     
-    // Filter by search term
     if (filters.searchTerm) {
       const searchTerm = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(job => 
@@ -92,14 +89,12 @@ const Dashboard = () => {
     try {
       await axios.put(`/api/jobs/${jobId}`, { status: newStatus });
       
-      // Update job in state
       const updatedJobs = jobs.map(job => 
         job._id === jobId ? { ...job, status: newStatus } : job
       );
       
       setJobs(updatedJobs);
       
-      // Also update filtered jobs
       const updatedFilteredJobs = filteredJobs.map(job => 
         job._id === jobId ? { ...job, status: newStatus } : job
       );
@@ -116,11 +111,9 @@ const Dashboard = () => {
       try {
         await axios.delete(`/api/jobs/${jobId}`);
         
-        // Remove job from state
         const updatedJobs = jobs.filter(job => job._id !== jobId);
         setJobs(updatedJobs);
         
-        // Also update filtered jobs
         const updatedFilteredJobs = filteredJobs.filter(job => job._id !== jobId);
         setFilteredJobs(updatedFilteredJobs);
         
@@ -147,7 +140,7 @@ const Dashboard = () => {
         </Link>
       </div>
       
-      {/* Stats Cards */}
+      
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-10">
         <div className="stat-card bg-gray-50 border border-gray-200">
           <span className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
@@ -190,7 +183,7 @@ const Dashboard = () => {
         </div>
       </div>
       
-      {/* Filters */}
+      
       <div className="section">
         <div className="flex items-center mb-4">
           <FaSlidersH className="text-gray-500 mr-2" />
@@ -199,7 +192,7 @@ const Dashboard = () => {
         <JobFilter onFilterChange={handleFilterChange} />
       </div>
       
-      {/* Job List */}
+      
       <div className="section">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">

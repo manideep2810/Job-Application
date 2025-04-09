@@ -1,8 +1,5 @@
 import User from '../models/User.js';
 
-// @desc    Register a new user
-// @route   POST /api/users/register
-// @access  Public
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -56,10 +53,8 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/users/login
-// @access  Public
 export const loginUser = async (req, res) => {
+  console.log("loginUser");
   try {
     const { email, password } = req.body;
     
@@ -114,9 +109,6 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// @desc    Get current logged in user
-// @route   GET /api/users/me
-// @access  Private
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);

@@ -33,7 +33,6 @@ const JobFilter = ({ onFilterChange }) => {
   return (
     <div className="mb-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        {/* Search */}
         <div className="relative flex-grow">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <FaSearch className="text-gray-400" />
@@ -62,7 +61,6 @@ const JobFilter = ({ onFilterChange }) => {
           )}
         </div>
 
-        {/* Filter Toggle Button */}
         <button
           type="button"
           className={`btn ${isOpen ? 'bg-primary-50 text-primary-700 border-primary-200' : 'btn-outline'} flex items-center whitespace-nowrap px-4`}
@@ -83,11 +81,9 @@ const JobFilter = ({ onFilterChange }) => {
         </button>
       </div>
 
-      {/* Filter Panel */}
       {isOpen && (
         <div className="mt-4 p-5 bg-white rounded-lg shadow-sm border border-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* Status Filter */}
             <div>
               <label htmlFor="status" className="form-label flex items-center">
                 <span className="text-primary-600 mr-2">●</span>
@@ -108,7 +104,6 @@ const JobFilter = ({ onFilterChange }) => {
               </select>
             </div>
 
-            {/* Date Range - Start */}
             <div>
               <label htmlFor="startDate" className="form-label flex items-center">
                 <FaCalendarAlt className="mr-2 text-primary-600" />
@@ -124,7 +119,6 @@ const JobFilter = ({ onFilterChange }) => {
               />
             </div>
 
-            {/* Date Range - End */}
             <div>
               <label htmlFor="endDate" className="form-label flex items-center">
                 <FaCalendarAlt className="mr-2 text-primary-600" />
@@ -141,7 +135,6 @@ const JobFilter = ({ onFilterChange }) => {
             </div>
           </div>
 
-          {/* Active Filters & Clear */}
           <div className="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between">
             <div className="flex flex-wrap gap-2">
               {activeFilterCount > 0 ? (
@@ -200,14 +193,12 @@ const JobFilter = ({ onFilterChange }) => {
                 <span className="text-sm text-gray-500">No active filters</span>
               )}
             </div>
-            
             {activeFilterCount > 0 && (
               <button
                 type="button"
-                className="text-primary-600 hover:text-primary-800 text-sm font-medium flex items-center"
+                className="text-sm text-primary-600 hover:text-primary-800 font-medium"
                 onClick={clearFilters}
               >
-                <FaTimes className="mr-1" />
                 Clear all filters
               </button>
             )}

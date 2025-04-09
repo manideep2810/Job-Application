@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 
 const JobCard = ({ job, onDelete, onStatusChange }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
   const menuRef = useRef(null);
   const btnRef = useRef(null);
   
@@ -33,8 +35,57 @@ const JobCard = ({ job, onDelete, onStatusChange }) => {
     onStatusChange(_id, newStatus);
     setShowMenu(false);
   };
+
+  const handleLogoError = () => {
+    setLogoError(true);
+  };
+
+  const extractDomainFromUrl = (url) => {
+    try {
+      if (!url) return null;
+      
+      const domain = url.replace(/(^\w+:|^)\/\//, '').replace(/www\./, '').split('/')[0];
+      
+      const parts = domain.split('.');
+      if (parts.length >= 2) {
+        const mainDomain = parts.slice(parts.length - 2).join('.');
+        return mainDomain;
+      }
+      
+      return domain;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const getCompanyLogoUrl = (companyName, jobLink) => {
+    if (jobLink) {
+      const domain = extractDomainFromUrl(jobLink);
+      if (domain) {
+        return `https://logo.clearbit.com/${domain}`;
+      }
+    }
+    
+    if (!companyName) return null;
+    
+    let cleanName = companyName
+      .toLowerCase()
+      .replace(/\s?(inc|llc|ltd|corp|corporation|limited)\.?$/i, '')
+      .trim();
+    
+    cleanName = cleanName
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '');
+    
+    return `https://logo.clearbit.com/${cleanName}.com`;
+  };
   
-  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (company) {
+      setLogoUrl(getCompanyLogoUrl(company, link));
+    }
+  }, [company, link]);
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -57,8 +108,19 @@ const JobCard = ({ job, onDelete, onStatusChange }) => {
     <div className="card">
       <div className="flex justify-between items-start">
         <div className="flex items-start space-x-3">
-          <div className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0 text-primary-700 border border-primary-100">
-            <FaBuilding className="text-xl" />
+          <div className="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0 text-primary-700 border border-primary-100 overflow-hidden">
+            {!logoError && logoUrl ? (
+              <img 
+                src={logoUrl}
+                alt={`${company} logo`}
+                className="w-full h-full object-contain p-1"
+                onError={handleLogoError}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <FaBuilding className="text-xl" />
+              </div>
+            )}
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900">{role}</h3>

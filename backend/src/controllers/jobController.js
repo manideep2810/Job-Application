@@ -1,14 +1,9 @@
 import Job from '../models/Job.js';
 
-// @desc    Create new job application
-// @route   POST /api/jobs
-// @access  Private
 export const createJob = async (req, res) => {
   try {
-    // Add user to request body
     req.body.user = req.user.id;
     
-    // Create job
     const job = await Job.create(req.body);
     
     res.status(201).json({
@@ -24,28 +19,20 @@ export const createJob = async (req, res) => {
   }
 };
 
-// @desc    Get all job applications
-// @route   GET /api/jobs
-// @access  Private
 export const getJobs = async (req, res) => {
   try {
     let query;
     
-    // Check if user is admin
     if (req.user.role === 'admin') {
-      // If admin, get all jobs
       query = Job.find();
     } else {
-      // If user, get only their jobs
       query = Job.find({ user: req.user.id });
     }
     
-    // Filter by status
     if (req.query.status) {
       query = query.find({ status: req.query.status });
     }
     
-    // Filter by date
     if (req.query.startDate && req.query.endDate) {
       query = query.find({
         applicationDate: {
@@ -55,11 +42,9 @@ export const getJobs = async (req, res) => {
       });
     }
     
-    // Sort by application date
     const sortBy = req.query.sortBy || '-applicationDate';
     query = query.sort(sortBy);
     
-    // Execute query
     const jobs = await query;
     
     res.status(200).json({
@@ -76,9 +61,6 @@ export const getJobs = async (req, res) => {
   }
 };
 
-// @desc    Get single job application
-// @route   GET /api/jobs/:id
-// @access  Private
 export const getJob = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
@@ -90,7 +72,6 @@ export const getJob = async (req, res) => {
       });
     }
     
-    // Make sure user owns job or is admin
     if (job.user.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
@@ -111,9 +92,6 @@ export const getJob = async (req, res) => {
   }
 };
 
-// @desc    Update job application
-// @route   PUT /api/jobs/:id
-// @access  Private
 export const updateJob = async (req, res) => {
   try {
     let job = await Job.findById(req.params.id);
@@ -125,7 +103,6 @@ export const updateJob = async (req, res) => {
       });
     }
     
-    // Make sure user owns job or is admin
     if (job.user.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
@@ -133,7 +110,6 @@ export const updateJob = async (req, res) => {
       });
     }
     
-    // Update job
     job = await Job.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
@@ -152,9 +128,6 @@ export const updateJob = async (req, res) => {
   }
 };
 
-// @desc    Delete job application
-// @route   DELETE /api/jobs/:id
-// @access  Private
 export const deleteJob = async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
@@ -166,7 +139,6 @@ export const deleteJob = async (req, res) => {
       });
     }
     
-    // Make sure user owns job or is admin
     if (job.user.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,

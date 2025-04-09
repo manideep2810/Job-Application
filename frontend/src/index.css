@@ -25,7 +25,7 @@
     @apply px-4 py-2 rounded-lg transition-colors duration-200 font-medium shadow-sm;
   }
   .btn-primary {
-    @apply bg-primary-500 text-white hover:bg-primary-600 active:bg-primary-700;
+    @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
   }
   .btn-secondary {
     @apply bg-secondary-500 text-gray-900 hover:bg-secondary-600 active:bg-secondary-700;
@@ -46,7 +46,7 @@
     @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium leading-none;
   }
   .badge-applied {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-primary-100 text-primary-800;
   }
   .badge-interview {
     @apply bg-amber-100 text-amber-800;
@@ -67,7 +67,7 @@
     @apply card flex flex-col items-center justify-center p-4 md:p-6 text-center transition-all duration-200 hover:translate-y-[-4px];
   }
   .stat-number {
-    @apply text-3xl font-bold mb-1;
+    @apply text-3xl font-bold mb-1 text-primary-600;
   }
   .stat-label {
     @apply text-sm text-gray-600 font-medium;

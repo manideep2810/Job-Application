@@ -156,7 +156,7 @@ const JobForm = () => {
       <div className="card">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Company */}
+            
             <div>
               <label htmlFor="company" className="form-label">
                 Company Name
@@ -180,7 +180,7 @@ const JobForm = () => {
               )}
             </div>
             
-            {/* Role */}
+            
             <div>
               <label htmlFor="role" className="form-label">
                 Job Role
@@ -204,7 +204,7 @@ const JobForm = () => {
               )}
             </div>
             
-            {/* Status */}
+            
             <div>
               <label htmlFor="status" className="form-label">
                 Application Status
@@ -223,7 +223,7 @@ const JobForm = () => {
               </select>
             </div>
             
-            {/* Application Date */}
+            
             <div>
               <label htmlFor="applicationDate" className="form-label flex items-center">
                 <FaCalendarAlt className="mr-1 text-gray-500" />
@@ -242,7 +242,7 @@ const JobForm = () => {
               )}
             </div>
             
-            {/* Job Link */}
+            
             <div className="md:col-span-2">
               <label htmlFor="link" className="form-label">
                 Job Link (Optional)
@@ -266,7 +266,7 @@ const JobForm = () => {
               )}
             </div>
             
-            {/* Notes */}
+            
             <div className="md:col-span-2">
               <label htmlFor="notes" className="form-label">
                 Notes (Optional)

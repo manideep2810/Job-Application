@@ -10,7 +10,6 @@ import NotFound from './pages/NotFound';
 function App() {
   const { isAuthenticated, user } = useAuth();
 
-  // Protected route component
   const ProtectedRoute = ({ children, adminOnly = false }) => {
     if (!isAuthenticated) {
       return <Navigate to="/login" />;
@@ -26,12 +25,12 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        {/* Public routes */}
+        
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         
-        {/* Protected routes */}
+        
         <Route path="dashboard" element={
           <ProtectedRoute>
             <Dashboard />
@@ -48,7 +47,7 @@ function App() {
           </ProtectedRoute>
         } />
         
-        {/* 404 route */}
+        
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

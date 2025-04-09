@@ -35,9 +35,7 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-// Encrypt password using bcrypt
 UserSchema.pre('save', async function(next) {
-  // Only run this if password was modified
   if (!this.isModified('password')) {
     return next();
   }
@@ -46,7 +44,6 @@ UserSchema.pre('save', async function(next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function() {
   return jwt.sign(
     { id: this._id, role: this.role },
@@ -55,7 +52,6 @@ UserSchema.methods.getSignedJwtToken = function() {
   );
 };
 
-// Match user entered password to hashed password in database
 UserSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

@@ -13,7 +13,6 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Check if user is already logged in on load
   useEffect(() => {
     const checkLoggedIn = async () => {
       try {
