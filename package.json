@@ -1,0 +1,25 @@
+{
+  "name": "job-application-tracker",
+  "version": "1.0.0",
+  "description": "Job Application Tracker - Full Stack MERN Application",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend"
+  },
+  "keywords": [
+    "job",
+    "tracker",
+    "mern",
+    "react",
+    "node",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC"
+} 

@@ -2,6 +2,10 @@ import { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
+const API_URL = import.meta.env.VITE_API_URL;
+
+// Configure axios with the base URL
+axios.defaults.baseURL = API_URL;
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -19,7 +23,7 @@ export function AuthProvider({ children }) {
         const token = localStorage.getItem('token');
         if (token) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const response = await axios.get('/api/users/me');
+          const response = await axios.get('/users/me');
           setUser(response.data.data);
           setIsAuthenticated(true);
         }
@@ -37,7 +41,7 @@ export function AuthProvider({ children }) {
   const register = async (userData) => {
     try {
       setError(null);
-      const response = await axios.post('/api/users/register', userData);
+      const response = await axios.post('/users/register', userData);
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -53,7 +57,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       setError(null);
-      const response = await axios.post('/api/users/login', { email, password });
+      const response = await axios.post('/users/login', { email, password });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;

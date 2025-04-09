@@ -11,7 +11,12 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://job-application-tracker-vercel.vercel.app', 'https://job-application-tracker.vercel.app'] 
+    : 'http://localhost:5173',
+  credentials: true
+}));
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/job-tracker';

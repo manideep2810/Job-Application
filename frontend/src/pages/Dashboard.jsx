@@ -27,7 +27,7 @@ const Dashboard = () => {
         setIsLoading(true);
         setError(null);
         
-        const response = await axios.get('/api/jobs');
+        const response = await axios.get('/jobs');
         const jobsData = response.data.data;
         
         setJobs(jobsData);
@@ -87,7 +87,7 @@ const Dashboard = () => {
   
   const handleStatusChange = async (jobId, newStatus) => {
     try {
-      await axios.put(`/api/jobs/${jobId}`, { status: newStatus });
+      await axios.put(`/jobs/${jobId}`, { status: newStatus });
       
       const updatedJobs = jobs.map(job => 
         job._id === jobId ? { ...job, status: newStatus } : job
@@ -109,7 +109,7 @@ const Dashboard = () => {
   const handleDeleteJob = async (jobId) => {
     if (window.confirm('Are you sure you want to delete this application?')) {
       try {
-        await axios.delete(`/api/jobs/${jobId}`);
+        await axios.delete(`/jobs/${jobId}`);
         
         const updatedJobs = jobs.filter(job => job._id !== jobId);
         setJobs(updatedJobs);

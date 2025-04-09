@@ -1,64 +1,59 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { FaSpinner, FaBuilding, FaBriefcase, FaCalendarAlt, FaLink, FaCheck } from 'react-icons/fa';
 import axios from 'axios';
-import { 
-  FaBuilding, 
-  FaBriefcase, 
-  FaCalendarAlt, 
-  FaLink, 
-  FaSpinner, 
-  FaCheck 
-} from 'react-icons/fa';
+import { useAuth } from '../context/AuthContext';
 
 const JobForm = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const isEdit = !!id;
+  
+  const [isLoading, setIsLoading] = useState(isEdit);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     company: '',
     role: '',
     status: 'Applied',
-    applicationDate: new Date().toISOString().substr(0, 10), // Current date in YYYY-MM-DD format
+    applicationDate: new Date().toISOString().split('T')[0],
     link: '',
     notes: ''
   });
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
   
-  const navigate = useNavigate();
-  const { id } = useParams(); // Job ID for editing
-  
-  // If ID exists, it's an edit operation
   useEffect(() => {
-    if (id) {
-      setIsEdit(true);
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+    
+    if (isEdit) {
       fetchJob(id);
     }
-  }, [id]);
+  }, [id, isAuthenticated, navigate]);
   
   const fetchJob = async (jobId) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      const response = await axios.get(`/api/jobs/${jobId}`);
-      const job = response.data.data;
+      const response = await axios.get(`/jobs/${jobId}`);
+      const jobData = response.data.data;
       
-      // Format the date for the input field
-      const formattedDate = job.applicationDate 
-        ? new Date(job.applicationDate).toISOString().substr(0, 10) 
-        : '';
+      // Format date for input field
+      const formattedDate = new Date(jobData.applicationDate).toISOString().split('T')[0];
       
       setFormData({
-        company: job.company || '',
-        role: job.role || '',
-        status: job.status || 'Applied',
+        company: jobData.company,
+        role: jobData.role,
+        status: jobData.status,
         applicationDate: formattedDate,
-        link: job.link || '',
-        notes: job.notes || ''
+        link: jobData.link || '',
+        notes: jobData.notes || ''
       });
     } catch (err) {
-      setError('Failed to fetch job details. Please try again.');
+      setError(err.response?.data?.message || 'Failed to fetch job details.');
       console.error('Error fetching job:', err);
     } finally {
       setIsLoading(false);
@@ -67,27 +62,32 @@ const JobForm = () => {
   
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({
+      ...formData,
+      [name]: value
+    });
     
-    // Clear field error when user types
+    // Clear validation error when field is edited
     if (formErrors[name]) {
-      setFormErrors({ ...formErrors, [name]: null });
+      setFormErrors({
+        ...formErrors,
+        [name]: null
+      });
     }
   };
   
   const validateForm = () => {
     const errors = {};
-    const { company, role, applicationDate } = formData;
     
-    if (!company.trim()) {
+    if (!formData.company.trim()) {
       errors.company = 'Company name is required';
     }
     
-    if (!role.trim()) {
+    if (!formData.role.trim()) {
       errors.role = 'Job role is required';
     }
     
-    if (!applicationDate) {
+    if (!formData.applicationDate) {
       errors.applicationDate = 'Application date is required';
     }
     
@@ -118,10 +118,10 @@ const JobForm = () => {
         
         if (isEdit) {
           // Update existing job
-          await axios.put(`/api/jobs/${id}`, formData);
+          await axios.put(`/jobs/${id}`, formData);
         } else {
           // Create new job
-          await axios.post('/api/jobs', formData);
+          await axios.post('/jobs', formData);
         }
         
         navigate('/dashboard');
